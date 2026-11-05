@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Como funciona o Turborepo</title>
+  <link rel="stylesheet" href="../assets/lesson.css">
+</head>
+<body>
+  <main class="lesson">
+    <header>
+      <p class="eyebrow">Lição 1 · 8 minutos</p>
+      <h1>Como funciona o Turborepo</h1>
+      <p class="lede">Turborepo organiza tarefas já existentes em uma workspace e evita repetir trabalho. Ele não substitui o gerenciador de pacotes nem executa aplicativos por si só.</p>
+    </header>
+
+    <section>
+      <h2>O modelo em uma imagem</h2>
+      <div class="card">
+        <pre>package.json → descobre workspaces e scripts
+turbo.json   → define ordem, entradas, saídas e cache
+CLI          → monta o grafo e executa o necessário
+
+apps/web → npm run build ─┐
+apps/docs → npm run build ├─&gt; Turborepo paraleliza e cacheia
+packages/ui → npm run build ─┘</pre>
+      </div>
+      <p>O Turborepo usa workspaces do npm, pnpm, Yarn ou Bun. Neste repositório, o gerenciador de pacotes declara <code>apps/*</code> e <code>packages/*</code> em [package.json](../package.json), enquanto <code>turbo.json</code> define os fluxos.</p>
+    </section>
+
+    <section>
+      <h2>Este repositório em execução</h2>
+      <p><code>npm run build</code> roda <code>turbo run build</code>. Para a task <code>build</code>, <code>^build</code> significa “construir primeiro as dependências de workspace”. As dependências <code>@repo/ui</code> são declaradas pelos aplicativos em seus próprios manifests.</p>
+      <div class="card">
+        <pre>{
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".next/**", "!.next/cache/**"]
+    }
+  }
+}</pre>
+      </div>
+      <p><code>dependsOn</code> determina a ordem; <code>inputs</code> determina o que muda o hash; <code>outputs</code> diz ao cache quais arquivos restaurar. <code>dev</code> é persistente e não usa cache, pois é um processo longo.</p>
+      <p><strong>Interpretação:</strong> trocar código em <code>@repo/ui</code> pode invalidar os builds que dependem dele. Trocar somente documentação pode não justificar executar tudo. Isso é <em>decision making</em>: Turborepo torna explícita a superfície afetada.</p>
+    </section>
+
+    <section>
+      <h2>Deploy dos aplicativos</h2>
+      <div class="card">
+        <ol>
+          <li>Trate <code>web</code> e <code>docs</code> como projetos de plataforma independentes.</li>
+          <li>Configure a Root Directory de cada projeto como <code>apps/web</code> ou <code>apps/docs</code>.</li>
+          <li>Use o build do monorepo, por exemplo <code>turbo run build --filter=web...</code>, quando a plataforma precisar de dependências internas.</li>
+          <li>Declare variáveis que afetam o build e configure a mesma variável na plataforma.</li>
+        </ol>
+      </div>
+      <p>Deploy não é publicado em npm. Neste exemplo, os aplicativos podem continuar privados e os pacotes internos podem ser usados apenas dentro da workspace.</p>
+    </section>
+
+    <section>
+      <h2>Recuperação ativa</h2>
+      <p>Escolha a afirmação que melhor descreve este repositório.</p>
+      <div id="quiz" class="card">
+        <div class="choices">
+          <button data-correct="true">Aplicações ficam em apps/*</button>
+          <button data-correct="false">Aplicações ficam em packages/*</button>
+          <button data-correct="false">Aplicações ficam no registry</button>
+        </div>
+        <p id="feedback" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Monorepo ou repositórios separados?</h2>
+      <p>Comece com monorepo quando equipes precisam fazer mudanças transversais com frequência e conseguem padronizar CI, tooling, releases e ownership. Comece separado quando os produtos têm ciclos, equipes, frameworks e requisitos de acesso muito distintos; custo de coordenação pode superar benefício de compartilhamento.</p>
+      <div class="card">
+        <table>
+          <thead><tr><th>Turborepo</th><th>Nx</th><th>Workspaces sem build runner</th></tr></thead>
+          <tbody><tr><td>Leve, aproveita scripts existentes, cache e filtros</td><td>Mais plugins, boundaries e CI distribuída</td><td>Mínimo investimento, menos automação</td></tr></tbody>
+        </table>
+      </div>
+      <p>Para mais governança, Nx tende a ser mais opinativo. Para um monorepo JavaScript pequeno e scripts já estáveis, Turborepo é uma opção de baixo atrito.</p>
+    </section>
+
+    <section>
+      <h2>Próximo passo</h2>
+      <p>Faça o primeiro teste sem deploy: execute <code>npx turbo run build --filter=web</code>. Depois, execute novamente e observe o cache. Para aprofundar o conceito, compare-o com a <a href="../reference/turborepo.html">referência rápida</a>.</p>
+      <p><strong>Fonte primária recomendada:</strong> <a href="https://turborepo.dev/docs/crafting-your-repository/configuring-tasks">Configuring Tasks</a> — use-a para confirmar dependências, outputs e inputs antes de adaptar este arquivo ao seu projeto.</p>
+      <p>Dúvidas ou partes confusas? Pergunte ao seu professor e faremos uma nova lição.</p>
+    </section>
+
+    <footer>
+      <a href="../reference/turborepo.html">Referência rápida</a> · <a href="../MISSION.md">Missão</a>
+    </footer>
+  </main>
+  <script>
+    document.querySelectorAll("#quiz button").forEach((button) => {
+      button.addEventListener("click", () => {
+        const feedback = document.querySelector("#feedback");
+        const correct = button.dataset.correct === "true";
+        feedback.textContent = correct
+          ? "Correto. apps/* contém os aplicativos implantáveis neste monorepo."
+          : "Ainda não. Procure onde ficam os aplicativos implantáveis.";
+        feedback.className = correct ? "good" : "bad";
+      });
+    });
+  </script>
+</body>
+</html>

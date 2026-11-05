@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Referência rápida — Turborepo</title>
+  <link rel="stylesheet" href="../assets/lesson.css">
+</head>
+<body>
+  <main class="lesson reference">
+    <header><p class="eyebrow">Referência rápida</p><h1>Turborepo em uma página</h1></header>
+    <section class="card">
+      <h2>Camadas do workspace</h2>
+      <pre>apps/*       aplicações implantáveis
+packages/*   código reutilizado e ferramentas
+package.json declara workspaces, scripts e ferramentas
+turbo.json   orquestra, prevê dependências e cacheia tasks</pre>
+    </section>
+    <section class="card">
+      <h2>Dependências das tasks</h2>
+      <pre>"dependsOn": ["^build"]  builds das dependências primeiro
+"dependsOn": ["build"]   outro script do mesmo pacote primeiro
+outputs                  arquivos que o cache restaura
+inputs                   arquivos que mudam o hash
+cache: false             task que não deve ser reutilizada
+persistent: true         processo longo, como dev/serve</pre>
+    </section>
+    <section class="card">
+      <h2>Comandos úteis</h2>
+      <pre>npm run build
+npx turbo run build --filter=web
+npx turbo run build --filter=web...
+npx turbo run build --dry=json</pre>
+      <p><code>...dependencies</code> inclui dependências; o operador é explicado pela sintaxe de filtros da CLI. Reinicie este monorepo pela raiz.</p>
+    </section>
+    <section class="card">
+      <h2>Deploy</h2>
+      <ol>
+        <li>Crie um projeto de plataforma para cada aplicativo implantável.</li>
+        <li>Aponte a Root Directory para <code>apps/web</code>, por exemplo.</li>
+        <li>Execute o build pela raiz quando necessário para resolver dependências internas.</li>
+        <li>Declare env vars que alteram builds em <code>turbo.json</code> e configure-as na plataforma.</li>
+        <li>Implante cada aplicativo independentemente; isso não exige publicá-lo no pacote registry.</li>
+      </ol>
+    </section>
+    <footer><a href="../lessons/0001-como-funciona-turborepo.html">Voltar à lição</a></footer>
+  </main>
+</body>
+</html>

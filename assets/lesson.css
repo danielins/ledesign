@@ -1,0 +1,72 @@
+:root {
+  color-scheme: light;
+  --ink: #19212d;
+  --muted: #64748b;
+  --paper: #f8fafc;
+  --panel: #ffffff;
+  --accent: #2563eb;
+  --success: #166534;
+  --error: #9f1239;
+  --border: #dbe3ee;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 18px/1.6 Georgia, "Times New Roman", serif;
+}
+.lesson {
+  width: min(760px, calc(100% - 32px));
+  margin: 56px auto 96px;
+}
+header { margin-bottom: 32px; }
+h1, h2, h3 { font-family: ui-sans-serif, system-ui, sans-serif; line-height: 1.15; }
+h1 { max-width: 680px; font-size: clamp(40px, 8vw, 68px); letter-spacing: -0.04em; margin: 8px 0 16px; }
+h2 { font-size: 28px; margin-top: 42px; }
+.eyebrow { color: var(--accent); font: 700 13px/1 ui-sans-serif, system-ui, sans-serif; letter-spacing: .14em; text-transform: uppercase; }
+.lede { font-size: 23px; color: var(--muted); }
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  margin: 20px 0;
+  box-shadow: 0 8px 30px rgba(15, 23, 42, .05);
+}
+pre, code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+pre {
+  overflow-x: auto;
+  padding: 18px;
+  border-radius: 10px;
+  background: #111827;
+  color: #f8fafc;
+  font-size: 14px;
+  line-height: 1.55;
+}
+code { font-size: .88em; }
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.choices { display: grid; gap: 10px; }
+button {
+  appearance: none;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: white;
+  color: var(--ink);
+  padding: 12px 14px;
+  text-align: left;
+  font: 16px/1.35 ui-sans-serif, system-ui, sans-serif;
+  cursor: pointer;
+}
+button:hover { border-color: var(--accent); }
+#feedback { min-height: 2.6em; font-family: ui-sans-serif, system-ui, sans-serif; font-weight: 700; }
+#feedback.good { color: var(--success); }
+#feedback.bad { color: var(--error); }
+footer { border-top: 1px solid var(--border); margin-top: 48px; padding-top: 20px; color: var(--muted); font-family: ui-sans-serif, system-ui, sans-serif; }
+@media print {
+  body { background: white; }
+  .lesson { width: 100%; margin: 0; }
+  button, #quiz { display: none; }
+}
