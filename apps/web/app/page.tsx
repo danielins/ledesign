@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Card } from "@repo/ui/card";
 import { Gradient } from "@repo/ui/gradient";
 import { TurborepoLogo } from "@repo/ui/turborepo-logo";
+import { Button } from "@repo/ui/components/button/button";
 
 const LINKS = [
   {
@@ -60,7 +61,7 @@ export default function Page() {
           <div className="z-50 flex items-center justify-center w-full">
             
             <div className="absolute z-50 flex items-center justify-center w-64 h-64">
-              
+              <Button>Teste</Button>
             </div>
 
             

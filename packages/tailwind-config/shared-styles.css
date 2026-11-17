@@ -1,7 +1,46 @@
 @import "tailwindcss";
 
-@theme {
-  --color-blue-1000: #2a8af6;
-  --color-purple-1000: #a853ba;
-  --color-red-1000: #e92a67;
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+
+  /* Escala Neutra (Wireframe temporário) */
+  --primitive-neutral-100: oklch(1 0 0);
+  --primitive-neutral-200: oklch(0.971 0.001 286.35);
+  --primitive-neutral-300: oklch(0.929 0.003 264.53);
+  --primitive-neutral-500: oklch(0.551 0.009 274.31);
+  --primitive-neutral-800: oklch(0.268 0.007 273.49);
+  --primitive-neutral-900: oklch(0.21 0.006 285.885);
+
+  /* Cores da Marca (Placeholders) */
+  --primitive-brand-primary: oklch(49.3% 0.277 287.2);
+  --primitive-brand-secondary: oklch(0.585 0.233 277.11);
+
+  /* Cores de Feedback (Padrão de mercado) */
+  --primitive-status-success: oklch(0.627 0.194 149.21);
+  --primitive-status-warning: oklch(0.769 0.188 70.08);
+  --primitive-status-danger: oklch(0.575 0.224 27.33);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-blue-1000: oklch(0.638 0.198 253.94);
+  --color-purple-1000: oklch(0.608 0.254 329.43);
+  --color-red-1000: oklch(0.575 0.267 15.35);
+  --color-brand: var(--primitive-brand-primary);
+}
+
+@layer base {
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
 }
